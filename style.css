@@ -1,0 +1,119 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Mono&display=swap");
+
+* {
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: radial-gradient(rgba(34, 58, 34, 0.75), black 120%);
+  font-family: "Space Mono", monospace;
+}
+
+.container {
+  padding: 5px;
+  color: white;
+  border: 1px solid whitesmoke;
+  border-radius: 10px;
+  height: 95vh;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-y: scroll;
+}
+.header {
+  padding: 1em;
+  border: 2px solid yellow;
+}
+.previous-cmds {
+  margin: 0.5em 0.5em;
+  font-size: 18px;
+}
+
+.command-line {
+  margin-bottom: 2em;
+}
+.cmd-prefix {
+  color: greenyellow;
+  margin-left: 0.5em;
+  font-size: 20px;
+  word-break: keep-all;
+}
+.cwd {
+  color: violet;
+  font-size: 20px;
+}
+
+input,
+input:active,
+input:enabled,
+input:focus {
+  min-width: 10px;
+  height: auto;
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  font-weight: 500;
+  color: white;
+  -webkit-text-fill-color: white;
+  outline: none;
+}
+
+.cmd-identified:focus {
+  -webkit-text-fill-color: yellow;
+  font-weight: 700;
+}
+.row {
+  display: flex;
+  flex-direction: row;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.help-comment {
+  margin-left: 0.5em;
+}
+.help-p {
+  margin-left: 0.5em;
+}
+
+.ls-flex {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.ls-folder {
+  color: cornflowerblue;
+  margin: 5px;
+}
+
+.ls-file {
+  display: flex;
+  margin: 5px;
+}
+
+@media (max-width: 500px) {
+  .container p {
+    font-size: 16px;
+  }
+  textarea,
+  textarea:active,
+  textarea:enabled,
+  textarea:focus {
+    font-size: 16px;
+  }
+  .cmd-prefix {
+    font-size: (16+15) px;
+  }
+  .cwd {
+    font-size: 16px;
+  }
+}
