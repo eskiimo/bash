@@ -1,7 +1,7 @@
 const input = document.getElementById("input");
 const prev_cmds = document.getElementsByClassName("previous-cmds")[0];
 const cmd_cwd = document.getElementsByClassName("cwd")[0];
-const cont = document.getElementsByClassName("container")[0];
+const cont = document.getElementsByClassName("scroll")[0];
 
 const cwd = [];
 
@@ -21,13 +21,14 @@ input.addEventListener("keydown", updateValue);
 input.addEventListener("input", checkIdentified);
 
 function updateValue(e) {
-  if (e.key === "Enter") commander(e.target.value);
-  console.log(`${e.target.value.length}px`);
+  if (e.key === "Enter") {
+    commander(e.target.value.toLowerCase());
+  }
   input.style.width = `${e.target.value.length * 20}px`;
 }
 
 function checkIdentified(e) {
-  if (availableCommands.includes(e.target.value)) {
+  if (availableCommands.includes(e.target.value.toLowerCase())) {
     input.classList.add("cmd-identified");
   } else {
     input.classList.remove("cmd-identified");
@@ -121,7 +122,7 @@ function commander(command) {
 }
 
 function entered(command) {
-  const prefix_text = document.createTextNode(`kareem@dev ~ `);
+  const prefix_text = document.createTextNode(`kareem@dev:~ `);
   const prefix = document.createElement("p");
   prefix.appendChild(prefix_text);
   prefix.style.marginRight = "10px";
@@ -145,5 +146,5 @@ function entered(command) {
   prev_cmds.appendChild(history);
   input.value = "";
 
-  cont.scrollTop = cont.scrollHeight + 200;
+  cont.scrollTop = cont.scrollHeight + 500;
 }
