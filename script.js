@@ -42,7 +42,7 @@ function commander(command) {
       const helpDiv = document.createElement("div");
       helpDiv.classList.add("help-flex");
       for (var i = 0; i < availableCommands.length; i++) {
-        const textnode = document.createTextNode(`/${availableCommands[i]}`);
+        const textnode = document.createTextNode(availableCommands[i]);
         const para = document.createElement("p");
         para.appendChild(textnode);
         para.classList.add("help-p");
@@ -57,7 +57,7 @@ function commander(command) {
       lsDiv.classList.add("ls-flex");
       directories.sort();
       for (var i = 0; i < directories.length; i++) {
-        const textnode = document.createTextNode(directories[i].name);
+        const textnode = document.createTextNode(`/${directories[i].name}`);
         const para = document.createElement("p");
         if (directories[i].type === "folder") {
           para.classList.add("ls-folder");
