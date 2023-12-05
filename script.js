@@ -55,9 +55,15 @@ function commander(command) {
       entered(command);
       const lsDiv = document.createElement("div");
       lsDiv.classList.add("ls-flex");
-      directories.sort();
+
       for (var i = 0; i < directories.length; i++) {
-        const textnode = document.createTextNode(`/${directories[i].name}`);
+        let slash = "";
+        if (directories[i].type === "folder") {
+          slash = "/";
+        }
+        const textnode = document.createTextNode(
+          `${slash}${directories[i].name}`
+        );
         const para = document.createElement("p");
         if (directories[i].type === "folder") {
           para.classList.add("ls-folder");
@@ -68,6 +74,13 @@ function commander(command) {
         lsDiv.appendChild(para);
         prev_cmds.appendChild(lsDiv);
       }
+      break;
+    case "echo":
+      entered(command);
+      const echo_text = document.createTextNode(post);
+      const echo = document.createElement("p");
+      echo.appendChild(echo_text);
+      prev_cmds.appendChild(echo);
       break;
 
     case "clear":
@@ -87,7 +100,7 @@ function commander(command) {
       entered(command);
       directories.push({
         type: "folder",
-        name: `/${post}`,
+        name: `${post}`,
       });
       break;
 
