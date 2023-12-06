@@ -8,7 +8,16 @@ let currentFolder = DIR;
 const cwd = [currentFolder.current];
 const cwd_stack = [currentFolder];
 
-const availableCommands = ["ls", "echo", "touch", "mkdir", "rm", "cd", "clear"];
+const availableCommands = [
+  "ls",
+  "echo",
+  "touch",
+  "mkdir",
+  "rm",
+  "cd",
+  "clear",
+  "free",
+];
 
 // ON Enter
 input.addEventListener("keydown", (e) => {
@@ -72,8 +81,16 @@ function commander(command) {
       );
       break;
     case "echo":
-      const echo = Helper.newTextElement("p", post, []);
+      let echo = Helper.newTextElement("p", post, []);
       prev_cmds.appendChild(echo);
+      break;
+    case "free":
+      let msg = Helper.newTextElement(
+        "p",
+        `FREE FREE PALESTINE!!		\ud83c\uddf5\ud83c\uddf8 `,
+        []
+      );
+      prev_cmds.appendChild(msg);
       break;
 
     case "clear":
