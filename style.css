@@ -40,6 +40,7 @@ body {
 
 .command-line {
   margin-bottom: 2em;
+  flex-wrap:wrap;
 }
 .cmd-prefix {
   color: greenyellow;
@@ -57,10 +58,11 @@ input:active,
 input:enabled,
 input:focus {
   min-width: 100px;
+  max-width:100%;
   height: auto;
   background-color: transparent;
   border: none;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 500;
   color: white;
   -webkit-text-fill-color: white;
