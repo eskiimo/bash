@@ -56,7 +56,7 @@ input,
 input:active,
 input:enabled,
 input:focus {
-  min-width: 10px;
+  min-width: 100px;
   height: auto;
   background-color: transparent;
   border: none;

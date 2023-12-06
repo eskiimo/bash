@@ -50,9 +50,9 @@ function commander(command) {
       lsDiv.classList.add("ls-flex");
 
       for (let key in currentFolder.children) {
-        let slash = "";
+        let slash = "/";
         if (!currentFolder.children[key].children) {
-          slash = "/";
+          slash = "";
         }
 
         const para = Helper.newTextElement(
