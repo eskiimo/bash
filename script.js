@@ -1,39 +1,31 @@
+import { DIR, mkDir, touch, cd } from "./DIRECTORY.js";
 const input = document.getElementById("input");
 const prev_cmds = document.getElementsByClassName("previous-cmds")[0];
 const cmd_cwd = document.getElementsByClassName("cwd")[0];
 const cont = document.getElementsByClassName("scroll")[0];
 
-const cwd = [];
-
-const directories = [
-  { name: "Desktop", type: "folder" },
-  { name: "Documents", type: "folder" },
-  { name: "Pictures", type: "folder" },
-  { name: "Audio", type: "folder" },
-  { name: "Videos", type: "folder" },
-  { name: "file.js", type: "file" },
-];
+let currentFolder = DIR;
+const cwd = [currentFolder.current];
+const cwd_stack = [currentFolder];
 
 const availableCommands = ["ls", "echo", "touch", "mkdir", "cd", "clear"];
 
-input.addEventListener("keydown", updateValue);
-
-input.addEventListener("input", checkIdentified);
-
-function updateValue(e) {
+// ON Enter
+input.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     commander(e.target.value.toLowerCase());
   }
   input.style.width = `${e.target.value.length * 20}px`;
-}
+});
 
-function checkIdentified(e) {
+// ON Change
+input.addEventListener("input", (e) => {
   if (availableCommands.includes(e.target.value.toLowerCase())) {
     input.classList.add("cmd-identified");
   } else {
     input.classList.remove("cmd-identified");
   }
-}
+});
 
 function commander(command) {
   let [cmd, post] = command.split(" ");
@@ -57,24 +49,30 @@ function commander(command) {
       const lsDiv = document.createElement("div");
       lsDiv.classList.add("ls-flex");
 
-      for (var i = 0; i < directories.length; i++) {
+      for (let key in currentFolder.children) {
         let slash = "";
-        if (directories[i].type === "folder") {
+        if (!currentFolder.children[key].children) {
           slash = "/";
         }
-        const textnode = document.createTextNode(
-          `${slash}${directories[i].name}`
+
+        const para = Helper.newTextElement(
+          "p",
+          `${slash}${currentFolder.children[key].current}`,
+          []
         );
-        const para = document.createElement("p");
-        if (directories[i].type === "folder") {
-          para.classList.add("ls-folder");
-        } else {
+
+        if (!currentFolder.children[key].children) {
           para.classList.add("ls-file");
+        } else {
+          para.classList.add("ls-folder");
         }
-        para.appendChild(textnode);
+
         lsDiv.appendChild(para);
         prev_cmds.appendChild(lsDiv);
       }
+      console.log(
+        `${currentFolder.current} content : ${currentFolder.children}`
+      );
       break;
     case "echo":
       entered(command);
@@ -91,28 +89,33 @@ function commander(command) {
 
     case "touch":
       entered(command);
-      directories.push({
-        type: "file",
-        name: post,
-      });
+      touch(currentFolder, post);
       break;
 
     case "mkdir":
       entered(command);
-      directories.push({
-        type: "folder",
-        name: `${post}`,
-      });
+      mkDir(currentFolder, post);
       break;
 
     case "cd":
       entered(command);
-      if (post === "..") {
-        cwd.pop();
+      if (currentFolder.children[post]) {
+        cwd.push(currentFolder.children[post].current);
+        cwd_stack.push(currentFolder.children[post]);
+        currentFolder = currentFolder.children[post];
+        console.log(`cd ${post} `, cwd);
+      } else if (post === "..") {
+        console.log("cd .. ");
+        if (cwd_stack.length > 1) {
+          cwd.pop();
+          cwd_stack.pop();
+        }
+        currentFolder = cwd_stack[cwd.length - 1];
       } else {
-        cwd.push(post);
+        console.log("un matched directory");
       }
       cmd_cwd.innerHTML = cwd.join("/");
+
       break;
 
     default:
@@ -122,20 +125,15 @@ function commander(command) {
 }
 
 function entered(command) {
-  const prefix_text = document.createTextNode(`kareem@dev:~ `);
-  const prefix = document.createElement("p");
-  prefix.appendChild(prefix_text);
+  // concat user + cwd + last cmd display it above + clears input field
+  const prefix = Helper.newTextElement("p", `kareem@dev:~ `, []);
   prefix.style.marginRight = "10px";
   prefix.style.color = "greenyellow";
 
-  const Icwd_text = document.createTextNode(`${cwd.join("/")}`);
-  const Icwd = document.createElement("p");
-  Icwd.appendChild(Icwd_text);
+  const Icwd = Helper.newTextElement("p", `${cwd.join("/")}`, []);
   Icwd.style.color = "violet";
 
-  const command_name = document.createElement("p");
-  const command_name_text = document.createTextNode(`$ ${command}`);
-  command_name.appendChild(command_name_text);
+  const command_name = Helper.newTextElement("p", `$ ${command}`, []);
 
   const history = document.createElement("div");
   history.appendChild(prefix);
@@ -148,3 +146,16 @@ function entered(command) {
 
   cont.scrollTop = cont.scrollHeight + 500;
 }
+
+const Helper = {
+  newTextElement: (type, text, classes) => {
+    let el = document.createElement(type);
+    let eltext = document.createTextNode(text);
+    el.appendChild(eltext);
+
+    for (let i = 0; i < classes.length; i++) {
+      el.classList.add(classes[i]);
+    }
+    return el;
+  },
+};

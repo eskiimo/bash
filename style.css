@@ -43,13 +43,13 @@ body {
 }
 .cmd-prefix {
   color: greenyellow;
-  margin-left: 0.5em;
-  font-size: 20px;
+  margin: 0 0.5em;
+  font-size: 18px;
   word-break: keep-all;
 }
 .cwd {
   color: violet;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 input,
@@ -115,7 +115,7 @@ input:focus {
     font-size: 16px;
   }
   .cmd-prefix {
-    font-size: (16+15) px;
+    font-size: 16px;
   }
   .cwd {
     font-size: 16px;
@@ -135,7 +135,7 @@ input:focus {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #0276bb;
+  background: #0277bb93;
   border-radius: 10px;
 }
 
