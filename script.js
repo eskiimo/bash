@@ -1,14 +1,14 @@
-import { DIR, mkDir, touch, cd } from "./DIRECTORY.js";
+import { DIR, mkDir, touch, cd, del } from "./DIRECTORY.js";
 const input = document.getElementById("input");
 const prev_cmds = document.getElementsByClassName("previous-cmds")[0];
 const cmd_cwd = document.getElementsByClassName("cwd")[0];
-const cont = document.getElementsByClassName("scroll")[0];
+const container = document.getElementsByClassName("scroll")[0];
 
 let currentFolder = DIR;
 const cwd = [currentFolder.current];
 const cwd_stack = [currentFolder];
 
-const availableCommands = ["ls", "echo", "touch", "mkdir", "cd", "clear"];
+const availableCommands = ["ls", "echo", "touch", "mkdir", "rm", "cd", "clear"];
 
 // ON Enter
 input.addEventListener("keydown", (e) => {
@@ -29,23 +29,20 @@ input.addEventListener("input", (e) => {
 
 function commander(command) {
   let [cmd, post] = command.split(" ");
+  entered(command);
   switch (cmd) {
     case "help":
-      entered(command);
       const helpDiv = document.createElement("div");
       helpDiv.classList.add("help-flex");
       for (var i = 0; i < availableCommands.length; i++) {
-        const textnode = document.createTextNode(availableCommands[i]);
-        const para = document.createElement("p");
-        para.appendChild(textnode);
-        para.classList.add("help-p");
+        let para = Helper.newTextElement("p", availableCommands[i], ["help-p"]);
+
         helpDiv.appendChild(para);
-        prev_cmds.appendChild(helpDiv);
       }
+      prev_cmds.appendChild(helpDiv);
       break;
 
     case "ls":
-      entered(command);
       const lsDiv = document.createElement("div");
       lsDiv.classList.add("ls-flex");
 
@@ -75,30 +72,23 @@ function commander(command) {
       );
       break;
     case "echo":
-      entered(command);
-      const echo_text = document.createTextNode(post);
-      const echo = document.createElement("p");
-      echo.appendChild(echo_text);
+      const echo = Helper.newTextElement("p", post, []);
       prev_cmds.appendChild(echo);
       break;
 
     case "clear":
-      entered(command);
       prev_cmds.innerHTML = "";
       break;
 
     case "touch":
-      entered(command);
       touch(currentFolder, post);
       break;
 
     case "mkdir":
-      entered(command);
       mkDir(currentFolder, post);
       break;
 
     case "cd":
-      entered(command);
       if (currentFolder.children[post]) {
         cwd.push(currentFolder.children[post].current);
         cwd_stack.push(currentFolder.children[post]);
@@ -117,7 +107,20 @@ function commander(command) {
       cmd_cwd.innerHTML = cwd.join("/");
 
       break;
-
+    case "rm":
+      let isDeleted = del(currentFolder, post);
+      if (isDeleted) {
+        let msg = Helper.newTextElement("p", "file deleted", []);
+        prev_cmds.appendChild(msg);
+      } else {
+        let msg = Helper.newTextElement(
+          "p",
+          `bash: ${post}: no such file or directory`,
+          []
+        );
+        prev_cmds.appendChild(msg);
+      }
+      break;
     default:
       let e = `bash: ${command} command is not found `;
       entered(e);
@@ -144,7 +147,7 @@ function entered(command) {
   prev_cmds.appendChild(history);
   input.value = "";
 
-  cont.scrollTop = cont.scrollHeight + 500;
+  container.scrollTop = container.scrollHeight + 500;
 }
 
 const Helper = {

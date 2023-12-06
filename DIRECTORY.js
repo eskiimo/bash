@@ -34,3 +34,12 @@ export const mkDir = (node, folder) => {
 export const touch = (node, file) => {
   node.children[file] = { current: file };
 };
+
+export const del = (node, file) => {
+  if (node.children[file]) {
+    delete node.children[file];
+    return true;
+  } else {
+    return false;
+  }
+};
