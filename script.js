@@ -87,7 +87,7 @@ function commander(command) {
     case "free":
       let msg = Helper.newTextElement(
         "p",
-        `FREE FREE PALESTINE!!		\ud83c\uddf5\ud83c\uddf8 `,
+        `FREE FREE PALESTINE!		\ud83c\uddf5\ud83c\uddf8 `,
         []
       );
       prev_cmds.appendChild(msg);
